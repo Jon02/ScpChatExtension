@@ -28,8 +28,6 @@ public class EntryPoint : Plugin<PluginConfig>
         HarmonyPatcher = new(HarmonyId);
         HarmonyPatcher.PatchAll();
 
-        Server.RoundStarted += OnRoundStarted;
-
         base.OnEnabled();
     }
 
@@ -39,19 +37,8 @@ public class EntryPoint : Plugin<PluginConfig>
         HarmonyPatcher.UnpatchAll(HarmonyId);
         HarmonyPatcher = null;
         
-        Server.RoundStarted -= OnRoundStarted;
+      
         base.OnDisabled();
     }
 
-    private void OnRoundStarted()
-    {
-        Timing.CallDelayed(Random.Range(5, 7) * 60, () =>
-        {
-            PluginConfig.AllowedRoles.Add(RoleTypeId.Scp939);
-            var dog = Player.Get(RoleTypeId.Scp939).FirstOrDefault();
-            if (dog == null) return;
-            
-            dog.ShowHint("\n\n\n<align=left>Du hast eine der Stimmen gemeistert. Du kannst nun <color=yellow>sprechen</color>!\nDrücke dazu die ALT-Taste!", 5);
-        });
-    }
 }
